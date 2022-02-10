@@ -1,12 +1,12 @@
 //Exercicio aula 2
 // 1
-const nome = "Dennys";
+const nome = 'Dennys';
 //2
 const estaChovendo = false;
 //3
-const data = new Date("1999", "06", "01");
+const data = new Date('1999', '06', '01');
 let dataFormatada =
-  data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear();
+  data.getDate() + '/' + data.getMonth() + '/' + data.getFullYear();
 
 //4
 const num = 5;
@@ -16,16 +16,16 @@ const num = 5;
 const list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 //6
 const aluno = {
-  nome: "João",
-  dataCadastro: new Date("2022", "02", "01"),
-  turma: 2
+  nome: 'João',
+  dataCadastro: new Date('2022', '02', '01'),
+  turma: 2,
 };
 //7
 const dados = {
   nomeDados: nome,
   estaChovendoDados: estaChovendo,
   dataDados: dataFormatada,
-  numDados: num
+  numDados: num,
 };
 //console.log(dados);
 //8
@@ -34,8 +34,8 @@ var_dez *= 3;
 //console.log(var_dez);
 //9
 const dicionarios = [
-  { nome: "Diogo", dataCadastro: new Date("2022", "02", "01") },
-  { nome: "Daniel", dataCadastro: new Date("2022", "02", "01") }
+  { nome: 'Diogo', dataCadastro: new Date('2022', '02', '01') },
+  { nome: 'Daniel', dataCadastro: new Date('2022', '02', '01') },
 ];
 //console.log(dicionarios);
 //10
@@ -57,13 +57,13 @@ class Automovel {
       nome: this.nome,
       marca: this.marca,
       modelo: this.modelo,
-      paisOrigem: this.paisOrigem
+      paisOrigem: this.paisOrigem,
     };
   }
 }
 //2
-const auto1 = new Automovel("Uno", "Fiat", "Fire", "Brasil");
-const auto2 = new Automovel("KA", "Ford", "Popular", "Brasil");
+const auto1 = new Automovel('Uno', 'Fiat', 'Fire', 'Brasil');
+const auto2 = new Automovel('KA', 'Ford', 'Popular', 'Brasil');
 const listAutos = [auto1, auto2];
 //console.log(listAutos);
 //3
@@ -81,13 +81,13 @@ for (let automovel of listAutos) {
 
 //1
 const auto_3 = {
-  nome: "Sandero",
-  marca: "Renault",
-  modelo: "Adventure",
-  paisOrigem: "França"
+  nome: 'Sandero',
+  marca: 'Renault',
+  modelo: 'Adventure',
+  paisOrigem: 'França',
 };
 //2
-auto_3["cor"] = "preto";
+auto_3['cor'] = 'preto';
 
 //3
 delete auto_3.paisOrigem;
