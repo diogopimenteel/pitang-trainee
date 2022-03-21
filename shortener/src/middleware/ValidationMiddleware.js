@@ -1,4 +1,4 @@
-const validation = schema => async (request, response, next) => {
+const validation = (schema) => async (request, response, next) => {
   try {
     await schema.validate(request.body);
     next();

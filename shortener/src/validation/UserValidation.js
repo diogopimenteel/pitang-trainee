@@ -1,4 +1,4 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
 const UserValidation = yup.object().shape({
   name: yup
@@ -7,7 +7,7 @@ const UserValidation = yup.object().shape({
     .max(30)
     .matches(
       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
-      "Invalid name"
+      'Invalid name',
     )
     .required(),
   email: yup.string().email().required(),

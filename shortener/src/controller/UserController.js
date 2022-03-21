@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
-import bcryptjs from "bcryptjs";
-import jsonwebtoken from "jsonwebtoken";
-import { titleCase } from "title-case";
+import mongoose from 'mongoose';
+import bcryptjs from 'bcryptjs';
+import jsonwebtoken from 'jsonwebtoken';
+import { titleCase } from 'title-case';
 
-import UserModel from "../model/UserModel.js";
+import UserModel from '../model/UserModel.js';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { JWT_SECRET } = process.env;
 
-const hashPassword = password => {
+const hashPassword = (password) => {
   const salt = bcryptjs.genSaltSync(10);
   const hash = bcryptjs.hashSync(password, salt);
 
@@ -22,27 +22,27 @@ export default class UserController {
     const user = await UserModel.findOne({ email }).lean();
 
     if (!user) {
-      return response.status(404).json({ message: "User not found!" });
+      return response.status(404).json({ message: 'User not found!' });
     }
 
     if (!bcryptjs.compareSync(password, user.password)) {
-      return response.status(404).json({ message: "Invalid password!" });
+      return response.status(404).json({ message: 'Invalid password!' });
     }
 
     delete user.password;
 
     const token = jsonwebtoken.sign(
-      { id: user._id, name: user.name, email: user.email },
-      JWT_SECRET
+      user,
+      JWT_SECRET,
     );
 
-    response.json({ token: token });
+    response.json({ token });
   }
 
   async index(request, response) {
     const users = await UserModel.find();
 
-    response.json(users.length === 0 ? { message: "Empty list" } : { data: users });
+    response.json(users.length === 0 ? { message: 'Empty list' } : { data: users });
   }
 
   async getOne(request, response) {
@@ -52,13 +52,13 @@ export default class UserController {
       const user = await UserModel.findById(id);
 
       if (!user) {
-        return response.status(404).json({ message: "User not found!" });
+        return response.status(404).json({ message: 'User not found!' });
       }
 
-      return response.json({ message: "User found", data: user });
+      return response.json({ message: 'User found', data: user });
     }
 
-    response.status(400).json({ message: "Invalid id!" });
+    response.status(400).json({ message: 'Invalid id!' });
   }
 
   async store(request, response) {
@@ -70,7 +70,7 @@ export default class UserController {
       password: hashPassword(password),
     });
 
-    response.status(201).json({ message: "User created successfully", data: user });
+    response.status(201).json({ message: 'User created successfully', data: user });
   }
 
   async remove(request, response) {
@@ -80,15 +80,15 @@ export default class UserController {
       const user = await UserModel.findById(id);
 
       if (!user) {
-        return response.status(404).json({ message: "User not found" });
+        return response.status(404).json({ message: 'User not found' });
       }
 
       await user.remove();
 
-      return response.json({ message: "User removed" });
+      return response.json({ message: 'User removed' });
     }
 
-    response.status(400).json({ message: "Invalid id!" });
+    response.status(400).json({ message: 'Invalid id!' });
   }
 
   async update(request, response) {
@@ -105,18 +105,18 @@ export default class UserController {
         },
         {
           new: true,
-        }
+        },
       );
 
       if (!user) {
-        return response.status(404).json({ message: "User not found" });
+        return response.status(404).json({ message: 'User not found' });
       }
       return response.json({
-        message: "User updated successfully",
+        message: 'User updated successfully',
         data: user,
       });
     }
 
-    response.status(400).json({ message: "Invalid id!" });
+    response.status(400).json({ message: 'Invalid id!' });
   }
 }

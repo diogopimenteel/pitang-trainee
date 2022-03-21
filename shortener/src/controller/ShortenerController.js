@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
-import crypto from "crypto";
-import parser from "ua-parser-js";
-import ShortenerModel from "../model/ShortenerModel.js";
+import mongoose from 'mongoose';
+import crypto from 'crypto';
+import parser from 'ua-parser-js';
+import ShortenerModel from '../model/ShortenerModel.js';
 
 export default class ShortenerController {
   async index(request, response) {
     const shorteners = await ShortenerModel.find();
 
-    response.json(shorteners.length === 0 ? { message: "Empty list" } : { data: shorteners });
+    response.json(shorteners.length === 0 ? { message: 'Empty list' } : { data: shorteners });
   }
 
   async getOne(request, response) {
@@ -17,29 +17,29 @@ export default class ShortenerController {
       const shortener = await ShortenerModel.findById(id);
 
       if (!shortener) {
-        return response.status(404).json({ message: "Shortener not found" });
+        return response.status(404).json({ message: 'Shortener not found' });
       }
 
-      return response.json({ message: "Shortener found", data: shortener });
+      return response.json({ message: 'Shortener found', data: shortener });
     }
 
-    response.status(400).json({ message: "Invalid id" });
+    response.status(400).json({ message: 'Invalid id' });
   }
 
   async store(request, response) {
     const { link } = request.body;
 
     if (!link.trim()) {
-      return response.status(400).json({ message: "Link is missing" });
+      return response.status(400).json({ message: 'Link is missing' });
     }
 
     const shortener = await ShortenerModel.create({
       link: link.toLowerCase(),
-      hash: crypto.randomUUID().split("-")[0],
+      hash: crypto.randomUUID().split('-')[0],
       userId: request.loggedUser.id,
     });
 
-    response.json({ message: "Shortener created successfully", data: shortener });
+    response.json({ message: 'Shortener created successfully', data: shortener });
   }
 
   async remove(request, response) {
@@ -49,15 +49,15 @@ export default class ShortenerController {
       const shortener = await ShortenerModel.findById(id);
 
       if (!shortener) {
-        return response.status(404).json({ message: "Shortener not found" });
+        return response.status(404).json({ message: 'Shortener not found' });
       }
 
       await shortener.remove();
 
-      return response.json({ message: "User removed" });
+      return response.json({ message: 'User removed' });
     }
 
-    response.status(400).json({ message: "Invalid id" });
+    response.status(400).json({ message: 'Invalid id' });
   }
 
   async update(request, response) {
@@ -70,19 +70,19 @@ export default class ShortenerController {
         {
           link,
         },
-        { new: true }
+        { new: true },
       );
 
       if (!shortener) {
-        return response.status(404).json({ message: "Shortener not found" });
+        return response.status(404).json({ message: 'Shortener not found' });
       }
       return response.json({
-        message: "Shortener updated successfully",
+        message: 'Shortener updated successfully',
         data: shortener,
       });
     }
 
-    response.status(400).json({ message: "Invalid id!" });
+    response.status(400).json({ message: 'Invalid id!' });
   }
 
   async redirect(request, response) {
@@ -90,12 +90,12 @@ export default class ShortenerController {
     const shortener = await ShortenerModel.findOne({ hash });
 
     if (!shortener) {
-      return response.redirect("/");
+      return response.redirect('/');
     }
 
     const metadata = {
       ip: request.ip,
-      parser: parser(request.headers["user-agent"]),
+      parser: parser(request.headers['user-agent']),
     };
 
     shortener.hits++;
