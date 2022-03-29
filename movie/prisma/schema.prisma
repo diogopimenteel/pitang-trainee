@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMINISTRATOR
+  USER
+  REVIEWER
+}
+
+enum ParentalGuidance {
+  GENERAL_AUDIENCE
+  PARENTAL_GUIDANCE_SUGGESTED
+  PARENTAL_STRONGLY_CAUTIONED
+  RESTRICTED
+}
+
+enum TicketType {
+  STANDARD
+  HALF_PRICE
+  FREE
+  PROMOTION
+}
+
+enum Room {
+  IMAX
+  STANDARD
+  VIP
+}
+
+enum SeatStatus {
+  BLOCKED
+  AVAILABLE
+  SELECTED
+  BUSY
+}
+
+enum SeatType {
+  STANDARD
+  WHEELCHAIR
+  REDUCED_MOBILITY
+  OVERWEIGHT
+}
+
+model Cinema {
+  id       String   @id @default(uuid())
+  name     String
+  city     String
+  location String
+  rooms    String[]
+}
+
+model SessionSeats {
+  id        String     @id @default(uuid())
+  line      String
+  column    Int
+  type      SeatType   @default(STANDARD)
+  status    SeatStatus @default(AVAILABLE)
+  Session   Session?   @relation(fields: [sessionId], references: [id])
+  sessionId String?
+}
+
+model Session {
+  id           String         @id @default(uuid())
+  sessionDate  DateTime
+  room         Room
+  movie        Movie          @relation(fields: [movieId], references: [id])
+  movieId      String
+  Ticket       Ticket[]
+  SessionSeats SessionSeats[]
+}
+
+model Movie {
+  id                String           @id @default(uuid())
+  name              String
+  description       String
+  duration          Int
+  director          String
+  parental_guidance ParentalGuidance @default(GENERAL_AUDIENCE)
+  thumbnail         String?
+  rating            Float
+  languages         String[]
+  Session           Session[]
+}
+
+model Ticket {
+  id            String     @id @default(uuid())
+  Session       Session    @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  user          User       @relation(fields: [userId], references: [id])
+  userId        String
+  price         Decimal    @db.Decimal(10, 2)
+  purchaseDate  DateTime?
+  type          TicketType @default(STANDARD)
+  paymentStatus Boolean    @default(false)
+}
+
+model User {
+  id       String   @id @default(uuid())
+  role     UserRole @default(USER)
+  password String
+  name     String
+  email    String
+  bithDate DateTime
+  phone    String
+  Ticket   Ticket[]
+}
